@@ -60,8 +60,17 @@ app.get("/health", (req, res) =>
 
 // API Routes
 app.use("/api/v1/auth", require("./src/routes/auth.routes"));
+app.use("/api/v1/users", require("./src/routes/user.routes"));
+app.use("/api/v1/services", require("./src/routes/service.routes"));
 app.use("/api/v1/jobs", require("./src/routes/job.routes"));
 app.use("/api/v1/payments", require("./src/routes/payment.routes"));
+app.use("/api/v1/pricing", require("./src/routes/pricing.routes"));
+app.use("/api/v1/promo-codes", require("./src/routes/promoCode.routes"));
+app.use("/api/v1/admin", require("./src/routes/admin.routes"));
+app.use("/api/v1/tracking", require("./src/routes/tracking.routes"));
+app.use("/api/v1/chat", require("./src/routes/chat.routes"));
+app.use("/api/v1/notifications", require("./src/routes/notification.routes"));
+app.use("/api/v1/invoices", require("./src/routes/invoice.routes"));
 
 // 404
 app.use((req, res) =>

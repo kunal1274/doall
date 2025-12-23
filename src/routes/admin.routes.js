@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const adminController = require("../controllers/adminController");
+const promoCodeController = require("../controllers/promoCodeController");
 const { protect, authorize } = require("../middleware/auth.middleware");
 const { ensureTenantAccess } = require("../middleware/tenant.middleware");
 const { validate } = require("../middleware/validation.middleware");
@@ -59,6 +60,18 @@ router.put(
     validate,
   ],
   adminController.updateCommissionConfig
+);
+
+// Promo code management
+router.post(
+  "/promo-codes",
+  [
+    body("code").notEmpty().withMessage("Promo code required"),
+    body("type").isIn(["percentage", "fixed"]).withMessage("Invalid promo type"),
+    body("value").isFloat({ min: 0 }).withMessage("Valid value required"),
+    validate,
+  ],
+  promoCodeController.createPromoCode
 );
 
 module.exports = router;
