@@ -1,0 +1,112 @@
+{
+  "_id": "tenant_xyz123",
+  "name": "ABC Services Pvt Ltd",
+  "slug": "abc-services",
+  "domain": "abc-services.com",
+
+  "business": {
+    "gstin": "27AABCU9603R1ZM",
+    "pan": "AABCU9603R",
+    "registration_number": "U74999MH2020PTC123456",
+    "address": {
+      "line1": "123, MG Road",
+      "line2": "Near Central Mall",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "pincode": "400001",
+      "country": "India"
+    },
+    "contact": {
+      "phone": "+919876543210",
+      "email": "admin@abc-services.com",
+      "website": "https://abc-services.com"
+    }
+  },
+
+  "commission_config": {
+    "platform_fee": 1.0,
+    "dispatcher_cut": 2.0,
+    "admin_cut": 18.0,
+    "provider_cut": 79.0,
+    "service_specific": {
+      "plumber": {
+        "platform_fee": 1.5,
+        "dispatcher_cut": 2.5,
+        "admin_cut": 16.0,
+        "provider_cut": 80.0
+      }
+    }
+  },
+
+  "payment_config": {
+    "razorpay": {
+      "key_id": "rzp_live_xxxxx",
+      "key_secret": "encrypted_secret",
+      "webhook_secret": "whsec_xxxxx",
+      "accounts": {
+        "admin": "acc_adminAccount123",
+        "default_dispatcher": "acc_dispAccount456"
+      }
+    },
+    "phonepe": {
+      "merchant_id": "M123456789",
+      "salt_key": "encrypted_salt",
+      "enabled": false
+    }
+  },
+
+  "late_fine_config": {
+    "enabled": true,
+    "grace_period_minutes": 15,
+    "penalty_per_minute": 10,
+    "max_penalty_amount": 500,
+    "deduct_from": "provider",
+    "auto_calculate": true
+  },
+
+  "services": [
+    {
+      "service_id": "srv_plumber",
+      "name": "Plumber",
+      "pricing": {
+        "type": "hourly",
+        "base_rate": 300,
+        "minimum_charge": 300,
+        "currency": "INR"
+      },
+      "emergency_surcharge": 50,
+      "peak_hours_surcharge": 25
+    }
+  ],
+
+  "subscription": {
+    "plan": "premium",
+    "valid_until": "2025-12-31T23:59:59Z",
+    "limits": {
+      "max_providers": 100,
+      "max_customers": 1000,
+      "max_jobs_per_month": 5000
+    }
+  },
+
+  "settings": {
+    "timezone": "Asia/Kolkata",
+    "currency": "INR",
+    "language": "en",
+    "notifications": {
+      "sms_enabled": true,
+      "email_enabled": true,
+      "whatsapp_enabled": true
+    },
+    "features": {
+      "live_tracking": true,
+      "chat": true,
+      "gst_billing": true,
+      "auto_assignment": false
+    }
+  },
+
+  "status": "active",
+  "created_at": "2025-01-01T00:00:00Z",
+  "updated_at": "2025-12-23T10:30:00Z"
+}

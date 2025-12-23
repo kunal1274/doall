@@ -1,0 +1,16 @@
+{
+  "_id": "audit_log123",
+  "tenant_id": "tenant_xyz123",
+  "actor_id": "user_admin123",
+  "actor_role": "admin",
+  "action": "update_commission_config",
+  "resource_type": "tenant",
+  "resource_id": "tenant_xyz123",
+  "changes": {
+    "before": { "platform_fee": 1.0 },
+    "after": { "platform_fee": 1.5 }
+  },
+  "ip_address": "192.168.1.100",
+  "user_agent": "Mozilla/5.0...",
+  "timestamp": "2025-12-23T10:00:00Z"
+}

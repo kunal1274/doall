@@ -1,0 +1,12 @@
+{
+  "_id": "loc_track123",
+  "tenant_id": "tenant_xyz123",
+  "job_id": "job_xyz789",
+  "provider_id": "user_prov456",
+  "location": { "type": "Point", "coordinates": [77.392, 28.536] },
+  "accuracy": 10,
+  "speed": 15,
+  "heading": 45,
+  "status": "on_the_way",
+  "timestamp": "2025-12-24T09:45:00Z"
+}

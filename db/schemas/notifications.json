@@ -1,0 +1,15 @@
+{
+  "_id": "notif_xyz123",
+  "tenant_id": "tenant_xyz123",
+  "user_id": "user_cust123",
+  "type": "job_assigned",
+  "channel": "push",
+  "title": "Provider Assigned",
+  "body": "Rajesh Kumar has been assigned to your job",
+  "data": { "job_id": "job_xyz789", "action": "view_job" },
+  "status": "sent",
+  "sent_at": "2025-12-24T09:10:00Z",
+  "delivered_at": "2025-12-24T09:10:05Z",
+  "read_at": null,
+  "error": null
+}

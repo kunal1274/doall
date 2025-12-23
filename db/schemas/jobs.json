@@ -1,0 +1,101 @@
+{
+  "_id": "job_xyz789",
+  "tenant_id": "tenant_xyz123",
+  "job_number": "JOB-2025-001234",
+  "service_id": "srv_plumber123",
+  "service_name": "Plumber Services",
+  "customer_id": "user_cust123",
+  "provider_id": "user_prov456",
+  "dispatcher_id": "user_disp789",
+  "location": {
+    "address": {
+      "line1": "Flat 302, Shanti Apartments",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "pincode": "201301"
+    },
+    "coordinates": { "type": "Point", "coordinates": [77.391, 28.5355] },
+    "landmark": "Near Metro Station"
+  },
+  "schedule": {
+    "booking_type": "scheduled",
+    "preferred_date": "2025-12-24",
+    "preferred_time_slot": "10:00-12:00",
+    "actual_start_time": "2025-12-24T10:05:00Z",
+    "actual_end_time": "2025-12-24T12:30:00Z",
+    "duration_minutes": 145
+  },
+  "status": "completed",
+  "status_history": [
+    {
+      "status": "pending",
+      "timestamp": "2025-12-23T09:00:00Z",
+      "updated_by": "user_cust123"
+    }
+  ],
+  "pricing": {
+    "base_charge": 300,
+    "hourly_rate": 300,
+    "hours_worked": 2.42,
+    "labor_cost": 726,
+    "materials": [
+      {
+        "material_id": "mat_pipe_pvc",
+        "name": "PVC Pipe",
+        "quantity": 5,
+        "unit_price": 50,
+        "total": 250
+      }
+    ],
+    "materials_total": 250,
+    "distance_charge": 20,
+    "subtotal": 996,
+    "gst": {
+      "cgst_percentage": 9,
+      "sgst_percentage": 9,
+      "cgst_amount": 89.64,
+      "sgst_amount": 89.64,
+      "total_gst": 179.28
+    },
+    "late_fine": {
+      "expected_completion": "2025-12-24T12:00:00Z",
+      "actual_completion": "2025-12-24T12:30:00Z",
+      "delay_minutes": 30,
+      "chargeable_minutes": 15,
+      "penalty_per_minute": 10,
+      "total_penalty": 150,
+      "applied_to": "provider"
+    },
+    "total_amount": 1175.28,
+    "commission_split": {
+      "platform_fee_percentage": 1.0,
+      "platform_fee_amount": 11.75,
+      "dispatcher_percentage": 2.0,
+      "dispatcher_amount": 23.51,
+      "admin_percentage": 18.0,
+      "admin_amount": 211.55,
+      "provider_percentage": 79.0,
+      "provider_gross_amount": 928.47,
+      "late_fine_deduction": 150,
+      "provider_net_amount": 778.47
+    },
+    "currency": "INR"
+  },
+  "payment": {
+    "method": "online",
+    "gateway": "razorpay",
+    "razorpay_order_id": "order_MNOPqrst12345",
+    "razorpay_payment_id": "pay_XYZabcdef67890",
+    "status": "completed",
+    "paid_at": "2025-12-24T12:35:00Z",
+    "transfers": [{ "recipient": "platform", "amount": 11.75 }]
+  },
+  "invoice": {
+    "invoice_number": "INV-2025-001234",
+    "invoice_url": "https://cdn.example.com/invoices/INV-2025-001234.pdf",
+    "generated_at": "2025-12-24T12:30:00Z"
+  },
+  "rating": { "overall_rating": 5, "review": "Excellent service!" },
+  "created_at": "2025-12-23T09:00:00Z",
+  "updated_at": "2025-12-24T13:00:00Z"
+}

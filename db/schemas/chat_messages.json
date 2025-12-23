@@ -1,0 +1,17 @@
+{
+  "_id": "msg_abc123",
+  "tenant_id": "tenant_xyz123",
+  "job_id": "job_xyz789",
+  "sender_id": "user_cust123",
+  "sender_role": "customer",
+  "recipient_id": "user_prov456",
+  "recipient_role": "provider",
+  "message": {
+    "type": "text",
+    "content": "Will you be on time?",
+    "media_url": null
+  },
+  "read": false,
+  "read_at": null,
+  "timestamp": "2025-12-24T09:30:00Z"
+}

@@ -1,0 +1,25 @@
+{
+  "_id": "settle_abc123",
+  "tenant_id": "tenant_xyz123",
+  "recipient_id": "user_prov456",
+  "recipient_role": "provider",
+  "recipient_account": "acc_prov456",
+  "period": { "start_date": "2025-12-01", "end_date": "2025-12-31" },
+  "jobs": ["job_xyz789"],
+  "amount_breakdown": {
+    "total_earnings": 125000,
+    "platform_fees_deducted": 1250,
+    "late_fines_deducted": 500,
+    "tips_received": 2000,
+    "adjustments": -300,
+    "net_payable": 124950
+  },
+  "payment": {
+    "method": "bank_transfer",
+    "utr_number": "UTR202512231234567890",
+    "paid_at": "2025-12-31T23:59:59Z"
+  },
+  "status": "completed",
+  "created_at": "2025-12-31T18:00:00Z",
+  "updated_at": "2025-12-31T23:59:59Z"
+}
