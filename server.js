@@ -59,13 +59,36 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Health check
-app.get("/health", (req, res) =>
+app.get("/health", (req, res) => {
+  const mongoose = require("mongoose");
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-  })
-);
+    environment: process.env.NODE_ENV,
+    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    version: "1.0.0",
+  });
+});
+
+app.get("/health/ready", async (req, res) => {
+  const mongoose = require("mongoose");
+  
+  const health = {
+    status: "ok",
+    checks: {
+      mongodb: mongoose.connection.readyState === 1,
+      uptime: process.uptime() > 10,
+    },
+  };
+  
+  const allHealthy = Object.values(health.checks).every((check) => check === true);
+  
+  res.status(allHealthy ? 200 : 503).json({
+    ...health,
+    ready: allHealthy,
+  });
+});
 
 // API Routes
 app.use("/api/v1/auth", require("./src/routes/auth.routes"));

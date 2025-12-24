@@ -1,6 +1,7 @@
 const ServiceArea = require("../models/ServiceArea");
 const DriverBooking = require("../models/DriverBooking");
 const Driver = require("../models/Driver");
+const logger = require("../config/logger");
 
 // Haversine formula to calculate distance between two points
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -25,6 +26,8 @@ const calculateETA = (distance_km, avg_speed_kmh = 40) => {
 // Create service area
 exports.createServiceArea = async (req, res) => {
   try {
+    logger.logRequest(req, "Creating service area");
+    
     const {
       name,
       city,
@@ -50,11 +53,19 @@ exports.createServiceArea = async (req, res) => {
       max_distance_km: max_distance_km || 50,
     });
 
+    logger.logUserAction(req.user?.id || "system", "service_area_created", {
+      areaId: serviceArea._id,
+      name,
+      city,
+      zone_code: finalZoneCode,
+    });
+
     res.status(201).json({
       success: true,
       data: { service_area: serviceArea },
     });
   } catch (err) {
+    logger.logError(err, "createServiceArea");
     res.status(500).json({
       success: false,
       error: { message: err.message },
@@ -173,11 +184,14 @@ exports.checkServiceArea = async (req, res) => {
     const { latitude, longitude } = req.body;
 
     if (!latitude || !longitude) {
+      logger.warn("checkServiceArea called without lat/lng");
       return res.status(400).json({
         success: false,
         error: { message: "Latitude and longitude required" },
       });
     }
+
+    logger.info(`Checking service area for ${latitude}, ${longitude}`);
 
     // Find service areas with polygon boundaries
     const polygonAreas = await ServiceArea.find({
