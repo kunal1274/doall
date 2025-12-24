@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
+const path = require("path");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
@@ -22,11 +23,16 @@ connectDB();
 const socketManager = new SocketManager(server);
 app.set("socketManager", socketManager);
 
-// Security middleware
-app.use(helmet());
+// Security middleware - Modified for PWA
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || "http://localhost:11100",
     credentials: true,
   })
 );
@@ -49,6 +55,9 @@ app.use(compression());
 // Logging
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, "public")));
+
 // Health check
 app.get("/health", (req, res) =>
   res.json({
@@ -69,24 +78,44 @@ app.use("/api/v1/promo-codes", require("./src/routes/promoCode.routes"));
 app.use("/api/v1/admin", require("./src/routes/admin.routes"));
 app.use("/api/v1/tracking", require("./src/routes/tracking.routes"));
 app.use("/api/v1/chat", require("./src/routes/chat.routes"));
-app.use("/api/v1/notifications", require("./src/routes/notification.routes"));
-app.use("/api/v1/invoices", require("./src/routes/invoice.routes"));
+app.use("/api/v1/geo", require("./src/routes/geo.routes"));
 
-// 404
-app.use((req, res) =>
-  res
-    .status(404)
-    .json({
-      success: false,
-      error: { code: "NOT_FOUND", message: "Route not found" },
-    })
+// Driver Bulaao Service Routes
+app.use(
+  "/api/v1/driver-service/dispatcher",
+  require("./src/routes/dispatcher.routes")
+);
+app.use(
+  "/api/v1/driver-service/drivers",
+  require("./src/routes/driverService.routes")
+);
+app.use(
+  "/api/v1/driver-service/customer",
+  require("./src/routes/customerDriver.routes")
+);
+
+// Serve index.html for all non-API routes (SPA support)
+app.get("*", (req, res, next) => {
+  // Skip API routes
+  if (req.path.startsWith("/api/")) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// 404 for API routes only
+app.use("/api/*", (req, res) =>
+  res.status(404).json({
+    success: false,
+    error: { code: "NOT_FOUND", message: "API route not found" },
+  })
 );
 
 // Error handler
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 11000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

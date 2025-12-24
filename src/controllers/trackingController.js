@@ -1,17 +1,45 @@
 const LocationTracking = require("../models/LocationTracking");
 const Job = require("../models/Job");
+const DriverBooking = require("../models/DriverBooking");
+const {
+  processGeoAlerts,
+  checkRouteDeviation,
+} = require("../services/geoAlertService");
 
 exports.updateLocation = async (req, res) => {
   try {
-    const { job_id, latitude, longitude, status } = req.body;
+    const { job_id, latitude, longitude, status, accuracy, speed, heading } =
+      req.body;
+
     const loc = await LocationTracking.create({
       tenant_id: req.tenantId,
       job_id,
       provider_id: req.userId,
       location: { type: "Point", coordinates: [longitude, latitude] },
+      accuracy,
+      speed,
+      heading,
       status,
       timestamp: new Date(),
     });
+
+    // Process geo alerts for driver bookings
+    const booking = await DriverBooking.findById(job_id);
+    if (
+      booking &&
+      ["driver_en_route", "driver_assigned", "trip_in_progress"].includes(
+        booking.status
+      )
+    ) {
+      // Process alerts (approaching, arrived, ETA)
+      await processGeoAlerts(job_id, req.userId, latitude, longitude);
+
+      // Check route deviation for active trips
+      if (booking.status === "trip_in_progress") {
+        await checkRouteDeviation(job_id, req.userId, latitude, longitude);
+      }
+    }
+
     res.json({ success: true, data: { location: loc } });
   } catch (err) {
     res.status(500).json({ success: false, error: { message: err.message } });

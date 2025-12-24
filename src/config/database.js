@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
@@ -19,7 +17,10 @@ const connectDB = async () => {
       console.log("MongoDB disconnected");
     });
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error(`MongoDB Error: ${error.message}`);
+    console.log(
+      "💡 Tip: Update MONGODB_URI in .env or start MongoDB with Docker Compose"
+    );
     process.exit(1);
   }
 };

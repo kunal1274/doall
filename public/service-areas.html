@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Area Management - DoAll</title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+        margin: 20px 0;
+      }
+      .service-area-card {
+        background: white;
+        padding: 20px;
+        margin: 10px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .area-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .area-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: 500;
+      }
+      .badge-active {
+        background: #10b981;
+        color: white;
+      }
+      .badge-inactive {
+        background: #ef4444;
+        color: white;
+      }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 15px 0;
+      }
+      .pricing-item {
+        padding: 10px;
+        background: #f9fafb;
+        border-radius: 6px;
+      }
+      .pricing-label {
+        font-size: 0.85em;
+        color: #6b7280;
+        margin-bottom: 4px;
+      }
+      .pricing-value {
+        font-size: 1.25em;
+        font-weight: 600;
+        color: #111827;
+      }
+      .form-section {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #374151;
+      }
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: #3b82f6;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #2563eb;
+      }
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+      .btn-success {
+        background: #10b981;
+        color: white;
+      }
+      .btn-secondary {
+        background: #6b7280;
+        color: white;
+      }
+      .area-type-selector {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .area-type-btn {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .area-type-btn.active {
+        border-color: #3b82f6;
+        background: #eff6ff;
+      }
+      .drawing-tools {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 6px;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+      }
+      .modal-content {
+        background: white;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 12px;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🗺️ Service Area Management</h1>
+        <button class="btn btn-primary" onclick="showCreateModal()">
+          + Add Service Area
+        </button>
+      </header>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('areas')">
+          Service Areas
+        </button>
+        <button class="tab-btn" onclick="showTab('map')">Map View</button>
+        <button class="tab-btn" onclick="showTab('settings')">Settings</button>
+      </div>
+
+      <!-- Service Areas List -->
+      <div id="areas-tab" class="tab-content">
+        <div id="serviceAreasList"></div>
+      </div>
+
+      <!-- Map View -->
+      <div id="map-tab" class="tab-content" style="display: none">
+        <div id="map"></div>
+        <div id="mapLegend"></div>
+      </div>
+
+      <!-- Settings -->
+      <div id="settings-tab" class="tab-content" style="display: none">
+        <div class="form-section">
+          <h2>Global Settings</h2>
+          <div class="form-group">
+            <label>Default Max Distance (km)</label>
+            <input type="number" id="defaultMaxDistance" value="50" />
+          </div>
+          <div class="form-group">
+            <label>GPS Update Frequency (seconds)</label>
+            <input type="number" id="gpsUpdateFrequency" value="30" />
+          </div>
+          <div class="form-group">
+            <label>Auto-assign Drivers</label>
+            <select id="autoAssignEnabled">
+              <option value="manual">Manual Assignment Only</option>
+              <option value="auto">Auto-assign Nearest Driver</option>
+              <option value="hybrid">Hybrid (Manual with Auto-suggest)</option>
+            </select>
+          </div>
+          <button class="btn btn-success" onclick="saveSettings()">
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div id="serviceAreaModal" class="modal">
+      <div class="modal-content">
+        <h2 id="modalTitle">Create Service Area</h2>
+        <form id="serviceAreaForm">
+          <div class="form-group">
+            <label>Area Name *</label>
+            <input
+              type="text"
+              id="areaName"
+              required
+              placeholder="e.g., Bangalore Central"
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>City *</label>
+              <input
+                type="text"
+                id="areaCity"
+                required
+                placeholder="e.g., Bangalore"
+              />
+            </div>
+            <div class="form-group">
+              <label>Zone Code *</label>
+              <input
+                type="text"
+                id="areaZoneCode"
+                required
+                placeholder="e.g., BLR-001"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Area Type *</label>
+            <div class="area-type-selector">
+              <div
+                class="area-type-btn active"
+                onclick="selectAreaType('radius')"
+              >
+                <h4>🎯 Radius</h4>
+                <p>Circular area from center point</p>
+              </div>
+              <div class="area-type-btn" onclick="selectAreaType('polygon')">
+                <h4>📐 Polygon</h4>
+                <p>Custom drawn boundary</p>
+              </div>
+              <div class="area-type-btn" onclick="selectAreaType('city')">
+                <h4>🏙️ City</h4>
+                <p>Entire city boundary</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Radius Configuration -->
+          <div id="radiusConfig" class="form-section">
+            <h3>Radius Configuration</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Center Latitude</label>
+                <input
+                  type="number"
+                  step="any"
+                  id="centerLat"
+                  placeholder="12.9716"
+                />
+              </div>
+              <div class="form-group">
+                <label>Center Longitude</label>
+                <input
+                  type="number"
+                  step="any"
+                  id="centerLng"
+                  placeholder="77.5946"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Radius (km)</label>
+              <input type="number" id="radiusKm" value="5" min="1" max="100" />
+            </div>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="pickLocationOnMap()"
+            >
+              Pick Location on Map
+            </button>
+          </div>
+
+          <!-- Polygon Configuration -->
+          <div id="polygonConfig" class="form-section" style="display: none">
+            <h3>Polygon Configuration</h3>
+            <div class="drawing-tools">
+              <p>Click on the map to draw polygon boundaries</p>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="startDrawing()"
+              >
+                Start Drawing
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                onclick="clearDrawing()"
+              >
+                Clear
+              </button>
+            </div>
+            <div id="drawMap" style="height: 400px"></div>
+          </div>
+
+          <!-- Pricing Configuration -->
+          <div class="form-section">
+            <h3>Pricing</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Base Fare (₹)</label>
+                <input type="number" id="baseFare" required value="50" />
+              </div>
+              <div class="form-group">
+                <label>Per KM (₹)</label>
+                <input type="number" id="perKm" value="15" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Per Minute (₹)</label>
+                <input type="number" id="perMinute" value="2" />
+              </div>
+              <div class="form-group">
+                <label>Min Fare (₹)</label>
+                <input type="number" id="minFare" value="100" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Night Surcharge (%)</label>
+                <input type="number" id="nightSurcharge" value="0" />
+              </div>
+              <div class="form-group">
+                <label>Peak Hour Surcharge (%)</label>
+                <input type="number" id="peakSurcharge" value="0" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Max Distance (km)</label>
+            <input type="number" id="maxDistance" value="50" />
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="areaActive" checked />
+              Active
+            </label>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 20px">
+            <button type="submit" class="btn btn-success">Save Area</button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="closeModal()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/geoTracking.js"></script>
+    <script src="/js/serviceAreaAdmin.js"></script>
+  </body>
+</html>

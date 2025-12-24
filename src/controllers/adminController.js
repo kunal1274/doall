@@ -73,3 +73,40 @@ exports.updateUserStatus = async (req, res) => {
     res.status(500).json({ success: false, error: { message: err.message } });
   }
 };
+
+exports.updateCommissionConfig = async (req, res) => {
+  try {
+    const { platform_fee, dispatcher_cut, admin_cut, provider_cut } = req.body;
+    const total =
+      (platform_fee || 0) +
+      (dispatcher_cut || 0) +
+      (admin_cut || 0) +
+      (provider_cut || 0);
+
+    if (Math.abs(total - 100) > 0.01) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: { message: "Commission percentages must total 100%" },
+        });
+    }
+
+    const tenant = await Tenant.findById(req.tenantId);
+    if (!tenant) {
+      return res
+        .status(404)
+        .json({ success: false, error: { message: "Tenant not found" } });
+    }
+
+    tenant.commission_config.platform_fee = platform_fee;
+    tenant.commission_config.dispatcher_cut = dispatcher_cut;
+    tenant.commission_config.admin_cut = admin_cut;
+    tenant.commission_config.provider_cut = provider_cut;
+
+    await tenant.save();
+    res.json({ success: true, message: "Commission config updated" });
+  } catch (err) {
+    res.status(500).json({ success: false, error: { message: err.message } });
+  }
+};

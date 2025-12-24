@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#8B1C1C" />
+    <meta
+      name="description"
+      content="Multi-tenant service booking platform - Build atomic habits of excellence"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Doall" />
+
+    <title>Doall - Service Platform</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/icon-96x96.png"
+    />
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/styles.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+      </div>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav id="topNav" class="top-nav">
+      <div class="nav-container">
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo">
+          <i class="fas fa-infinity"></i>
+          <span>Doall</span>
+        </div>
+        <div class="nav-actions">
+          <button class="nav-btn" id="notificationBtn">
+            <i class="fas fa-bell"></i>
+            <span class="badge" id="notificationBadge">0</span>
+          </button>
+          <div class="user-menu" id="userMenu">
+            <button class="user-btn" id="userMenuBtn">
+              <img
+                src="/images/default-avatar.png"
+                alt="User"
+                id="userAvatar"
+                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2212%22 fill=%22%238B1C1C%22/%3E%3Ctext x=%2212%22 y=%2216%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2210%22%3EU%3C/text%3E%3C/svg%3E'"
+              />
+              <span id="userName">Guest</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="user-dropdown" id="userDropdown">
+              <a href="#" data-page="profile"
+                ><i class="fas fa-user"></i> Profile</a
+              >
+              <a href="#" data-page="settings"
+                ><i class="fas fa-cog"></i> Settings</a
+              >
+              <a href="#" id="logoutBtn"
+                ><i class="fas fa-sign-out-alt"></i> Logout</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <i class="fas fa-infinity"></i>
+          <span>Doall</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-user">
+        <img
+          src="/images/default-avatar.png"
+          alt="User"
+          id="sidebarAvatar"
+          onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%2212%22 fill=%22%238B1C1C%22/%3E%3Ctext x=%2212%22 y=%2216%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2210%22%3EU%3C/text%3E%3C/svg%3E'"
+        />
+        <div class="sidebar-user-info">
+          <h4 id="sidebarUserName">Guest User</h4>
+          <p id="sidebarUserRole">Welcome</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="services">
+          <i class="fas fa-concierge-bell"></i>
+          <span>Services</span>
+        </a>
+        <a href="#" class="nav-item" data-page="bookings">
+          <i class="fas fa-calendar-check"></i>
+          <span>My Bookings</span>
+        </a>
+        <a href="#" class="nav-item" data-page="chat">
+          <i class="fas fa-comments"></i>
+          <span>Messages</span>
+          <span class="badge">0</span>
+        </a>
+        <a href="#" class="nav-item" data-page="tracking">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Track Service</span>
+        </a>
+        <a href="#" class="nav-item" data-page="payments">
+          <i class="fas fa-wallet"></i>
+          <span>Payments</span>
+        </a>
+
+        <!-- Driver Bulaao Section -->
+        <div id="driverBulaaoMenu" class="menu-section" style="display: none">
+          <div class="menu-section-title">Driver Bulaao</div>
+          <a href="#" class="nav-item" data-page="driver-bulaao">
+            <i class="fas fa-car"></i>
+            <span>Book Driver</span>
+          </a>
+        </div>
+
+        <!-- Driver Section -->
+        <div id="driverMenu" class="menu-section" style="display: none">
+          <div class="menu-section-title">Driver</div>
+          <a href="#" class="nav-item" data-page="driver-dashboard">
+            <i class="fas fa-steering-wheel"></i>
+            <span>Driver Dashboard</span>
+          </a>
+          <a href="#" class="nav-item" data-page="driver-earnings">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>My Earnings</span>
+          </a>
+        </div>
+
+        <!-- Dispatcher Section -->
+        <div id="dispatcherMenu" class="menu-section" style="display: none">
+          <div class="menu-section-title">Dispatcher</div>
+          <a href="#" class="nav-item" data-page="dispatcher-dashboard">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Control Center</span>
+          </a>
+          <a href="#" class="nav-item" data-page="dispatcher-analytics">
+            <i class="fas fa-chart-bar"></i>
+            <span>Analytics</span>
+          </a>
+        </div>
+
+        <!-- Provider Specific -->
+        <div id="providerMenu" class="menu-section" style="display: none">
+          <div class="menu-section-title">Provider</div>
+          <a href="#" class="nav-item" data-page="provider-jobs">
+            <i class="fas fa-briefcase"></i>
+            <span>My Jobs</span>
+          </a>
+          <a href="#" class="nav-item" data-page="provider-earnings">
+            <i class="fas fa-dollar-sign"></i>
+            <span>Earnings</span>
+          </a>
+        </div>
+
+        <!-- Admin Specific -->
+        <div id="adminMenu" class="menu-section" style="display: none">
+          <div class="menu-section-title">Admin</div>
+          <a href="#" class="nav-item" data-page="admin-users">
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+          </a>
+          <a href="#" class="nav-item" data-page="admin-services">
+            <i class="fas fa-cogs"></i>
+            <span>Manage Services</span>
+          </a>
+          <a href="#" class="nav-item" data-page="admin-analytics">
+            <i class="fas fa-chart-line"></i>
+            <span>Analytics</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="atomic-quote">
+          <i class="fas fa-quote-left"></i>
+          <p>"Small changes, remarkable results"</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="main-content">
+      <div id="pageContent" class="page-content">
+        <!-- Dynamic content will be loaded here -->
+      </div>
+    </main>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="notification-panel">
+      <div class="panel-header">
+        <h3>Notifications</h3>
+        <button class="close-panel" id="closeNotificationPanel">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="panel-content" id="notificationContent">
+        <div class="empty-state">
+          <i class="fas fa-bell-slash"></i>
+          <p>No notifications</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <!-- Socket.io Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/services.js"></script>
+    <script src="/js/bookings.js"></script>
+    <script src="/js/driverBulaao.js"></script>
+    <script src="/js/driverDashboard.js"></script>
+    <script src="/js/dispatcherDashboard.js"></script>
+    <script src="/js/app.js"></script>
+
+    <script>
+      // Register Service Worker
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/service-worker.js")
+            .then((reg) => console.log("Service Worker registered"))
+            .catch((err) =>
+              console.log("Service Worker registration failed", err)
+            );
+        });
+      }
+    </script>
+  </body>
+</html>

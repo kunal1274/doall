@@ -7,11 +7,11 @@ const redis = new Redis(process.env.REDIS_URL);
 const redisAdapter = require("@socket.io/redis-adapter");
 
 // Models (require according to your project's structure)
-const Job = require("../models/Job");
-const ChatMessage = require("../models/ChatMessage");
-const LocationTracking = require("../models/LocationTracking");
-const Notification = require("../models/Notification");
-const User = require("../models/User");
+const Job = require("../src/models/Job");
+const ChatMessage = require("../src/models/ChatMessage");
+const LocationTracking = require("../src/models/LocationTracking");
+const Notification = require("../src/models/Notification");
+const User = require("../src/models/User");
 
 class SocketManager {
   constructor(server) {
@@ -181,13 +181,11 @@ class SocketManager {
           { _id: { $in: messageIds }, recipient_id: socket.userId },
           { $set: { read: true, read_at: new Date() } }
         );
-        this.io
-          .to(`job:${jobId}`)
-          .emit("chat:messages-read", {
-            messageIds,
-            readBy: socket.userId,
-            readAt: new Date(),
-          });
+        this.io.to(`job:${jobId}`).emit("chat:messages-read", {
+          messageIds,
+          readBy: socket.userId,
+          readAt: new Date(),
+        });
       } catch (error) {
         socket.emit("error", { message: "Failed to mark messages as read" });
       }
@@ -225,18 +223,16 @@ class SocketManager {
           })
         );
 
-        this.io
-          .to(`job:${jobId}`)
-          .emit("tracking:location-update", {
-            providerId: socket.userId,
-            latitude,
-            longitude,
-            accuracy,
-            speed,
-            heading,
-            status,
-            timestamp: new Date(),
-          });
+        this.io.to(`job:${jobId}`).emit("tracking:location-update", {
+          providerId: socket.userId,
+          latitude,
+          longitude,
+          accuracy,
+          speed,
+          heading,
+          status,
+          timestamp: new Date(),
+        });
 
         const job = await Job.findById(jobId);
         if (job && status === "on_the_way") {
@@ -244,13 +240,11 @@ class SocketManager {
             { latitude, longitude },
             job.location.coordinates
           );
-          this.io
-            .to(`job:${jobId}`)
-            .emit("tracking:eta-update", {
-              jobId,
-              etaMinutes: eta,
-              timestamp: new Date(),
-            });
+          this.io.to(`job:${jobId}`).emit("tracking:eta-update", {
+            jobId,
+            etaMinutes: eta,
+            timestamp: new Date(),
+          });
         }
       } catch (error) {
         socket.emit("error", { message: "Failed to update location" });
@@ -315,12 +309,10 @@ class SocketManager {
         await User.findByIdAndUpdate(socket.userId, {
           "availability.is_available": false,
         });
-        this.io
-          .to(`tenant:${socket.tenantId}`)
-          .emit("provider:offline", {
-            providerId: socket.userId,
-            timestamp: new Date(),
-          });
+        this.io.to(`tenant:${socket.tenantId}`).emit("provider:offline", {
+          providerId: socket.userId,
+          timestamp: new Date(),
+        });
       }
     });
   }
