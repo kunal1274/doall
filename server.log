@@ -1,0 +1,36 @@
+
+> service-platform-backend@1.0.0 start
+> node server.js
+
+(node:25264) [MONGOOSE] Warning: Duplicate schema index on {"slug":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:25264) [MONGOOSE] Warning: Duplicate schema index on {"booking_number":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+Server running on port 11000
+MongoDB Connected: localhost
+[0mGET /health [32m200[0m 2.840 ms - 73[0m
+[0mPOST /api/v1/auth/login [33m422[0m 5.815 ms - 114[0m
+[0mPOST /api/v1/auth/login [33m401[0m 87.125 ms - 59[0m
+[0mGET /api/v1/services [32m200[0m 5.157 ms - 39[0m
+MongoDB disconnected
+[0mGET /health [32m200[0m 0.673 ms - 78[0m
+[0mGET /api/v1/services [32m200[0m 7.091 ms - 39[0m
+[0mGET /health [32m200[0m 0.229 ms - 78[0m
+[0mGET /api/v1/services [32m200[0m 2.175 ms - 39[0m
+[0mGET /health [32m200[0m 0.233 ms - 78[0m
+MongoDB disconnected
+MongoDB disconnected
+MongoDB disconnected
+MongoDB disconnected
+[0mGET /health [32m200[0m 1.037 ms - 78[0m
+[0mGET /health [32m200[0m 0.960 ms - 78[0m
+[0mGET /api/v1/services [32m200[0m 6.925 ms - 39[0m
+[0mGET /health [32m200[0m 0.253 ms - 78[0m
+[0mPOST /api/v1/auth/login [33m401[0m 78.064 ms - 59[0m
+[0mPOST /api/v1/auth/login [33m401[0m 72.804 ms - 59[0m
+[0mPOST /api/v1/auth/register [31m500[0m 17.908 ms - 104[0m
+[0mPOST /api/v1/auth/login [33m401[0m 73.810 ms - 59[0m
+[0mPOST /api/v1/auth/login [32m200[0m 76.261 ms - 289[0m
+[0mPOST /api/v1/auth/login [32m200[0m 72.654 ms - 289[0m
+[0mGET /api/v1/admin/dashboard [32m200[0m 14.167 ms - 58[0m
+[0mPOST /api/v1/auth/login [32m200[0m 71.982 ms - 289[0m
+[0mGET /api/v1/admin/dashboard [32m200[0m 10.229 ms - 58[0m
