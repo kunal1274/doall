@@ -12,7 +12,11 @@ exports.updateLocation = async (req, res) => {
     const { job_id, latitude, longitude, status, accuracy, speed, heading } =
       req.body;
 
-    logger.info(`Location update for job ${job_id}: ${latitude}, ${longitude}, speed: ${speed || 0}km/h`);
+    logger.info(
+      `Location update for job ${job_id}: ${latitude}, ${longitude}, speed: ${
+        speed || 0
+      }km/h`
+    );
 
     const loc = await LocationTracking.create({
       tenant_id: req.tenantId,

@@ -8,15 +8,15 @@ export default defineConfig({
     port: 11100,
     host: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:11000',
-        changeOrigin: true
-      },
-      '/socket.io': {
-        target: 'http://localhost:11000',
+      "/api": {
+        target: "http://localhost:11000",
         changeOrigin: true,
-        ws: true
-      }
-    }
-  }
+      },
+      "/socket.io": {
+        target: "http://localhost:11000",
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+  },
 });

@@ -27,7 +27,7 @@ const calculateETA = (distance_km, avg_speed_kmh = 40) => {
 exports.createServiceArea = async (req, res) => {
   try {
     logger.logRequest(req, "Creating service area");
-    
+
     const {
       name,
       city,

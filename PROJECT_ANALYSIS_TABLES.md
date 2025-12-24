@@ -237,18 +237,18 @@
 
 ## TABLE 10: QUESTIONS FOR YOU
 
-| #   | Question                                            | Category       | Why Important                        | Your Answer    | Impact           |
-| --- | --------------------------------------------------- | -------------- | ------------------------------------ | -------------- | ---------------- |
-| Q1  | Do you want to keep PostgreSQL config or remove it? | Database       | .env has both PostgreSQL and MongoDB | ******\_****** | Config clarity   |
-| Q2  | What is your target production date?                | Planning       | Determines priority of fixes         | ******\_****** | Timeline         |
-| Q3  | Do you have budget for monitoring tools?            | Operations     | Need Sentry/New Relic                | ******\_****** | Monitoring setup |
-| Q4  | Are Twilio SMS and Email critical for launch?       | Features       | Currently using placeholders         | ******\_****** | Feature priority |
-| Q5  | Do you have a staging environment?                  | Infrastructure | Need for testing                     | ******\_****** | Testing approach |
-| Q6  | What is your expected concurrent user load?         | Performance    | Determines infrastructure            | ******\_****** | Scaling plan     |
-| Q7  | Do you want automated backups?                      | Operations     | Data protection                      | ******\_****** | Backup strategy  |
-| Q8  | Should we implement 2FA for admin?                  | Security       | Enhanced security                    | ******\_****** | Security level   |
-| Q9  | Do you need multi-language support?                 | Features       | Internationalization                 | ******\_****** | Feature scope    |
-| Q10 | What is your budget for API keys rotation?          | Security       | Some services charge per key         | ******\_****** | Security cost    |
+| #   | Question                                            | Category       | Why Important                        | Your Answer        | Impact           |
+| --- | --------------------------------------------------- | -------------- | ------------------------------------ | ------------------ | ---------------- |
+| Q1  | Do you want to keep PostgreSQL config or remove it? | Database       | .env has both PostgreSQL and MongoDB | **\*\***\_**\*\*** | Config clarity   |
+| Q2  | What is your target production date?                | Planning       | Determines priority of fixes         | **\*\***\_**\*\*** | Timeline         |
+| Q3  | Do you have budget for monitoring tools?            | Operations     | Need Sentry/New Relic                | **\*\***\_**\*\*** | Monitoring setup |
+| Q4  | Are Twilio SMS and Email critical for launch?       | Features       | Currently using placeholders         | **\*\***\_**\*\*** | Feature priority |
+| Q5  | Do you have a staging environment?                  | Infrastructure | Need for testing                     | **\*\***\_**\*\*** | Testing approach |
+| Q6  | What is your expected concurrent user load?         | Performance    | Determines infrastructure            | **\*\***\_**\*\*** | Scaling plan     |
+| Q7  | Do you want automated backups?                      | Operations     | Data protection                      | **\*\***\_**\*\*** | Backup strategy  |
+| Q8  | Should we implement 2FA for admin?                  | Security       | Enhanced security                    | **\*\***\_**\*\*** | Security level   |
+| Q9  | Do you need multi-language support?                 | Features       | Internationalization                 | **\*\***\_**\*\*** | Feature scope    |
+| Q10 | What is your budget for API keys rotation?          | Security       | Some services charge per key         | **\*\***\_**\*\*** | Security cost    |
 
 **Please fill in "Your Answer" column and send back**
 

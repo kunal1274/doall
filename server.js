@@ -66,14 +66,15 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV,
-    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    mongodb:
+      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
     version: "1.0.0",
   });
 });
 
 app.get("/health/ready", async (req, res) => {
   const mongoose = require("mongoose");
-  
+
   const health = {
     status: "ok",
     checks: {
@@ -81,9 +82,11 @@ app.get("/health/ready", async (req, res) => {
       uptime: process.uptime() > 10,
     },
   };
-  
-  const allHealthy = Object.values(health.checks).every((check) => check === true);
-  
+
+  const allHealthy = Object.values(health.checks).every(
+    (check) => check === true
+  );
+
   res.status(allHealthy ? 200 : 503).json({
     ...health,
     ready: allHealthy,
