@@ -15,7 +15,9 @@ const validationRules = {
     body("password")
       .isLength({ min: 8 })
       .withMessage("Password must be at least 8 characters")
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/
+      )
       .withMessage(
         "Password must contain at least one uppercase, lowercase, number and special character"
       ),
@@ -28,9 +30,7 @@ const validationRules = {
 
   // MongoDB ID validation
   mongoId: (fieldName = "id") =>
-    param(fieldName)
-      .isMongoId()
-      .withMessage("Invalid ID format"),
+    param(fieldName).isMongoId().withMessage("Invalid ID format"),
 
   // Latitude validation
   latitude: (fieldName = "latitude") =>
@@ -55,7 +55,9 @@ const validationRules = {
     body(fieldName)
       .trim()
       .isLength({ min: minLength })
-      .withMessage(`${fieldName} is required and must be at least ${minLength} characters`),
+      .withMessage(
+        `${fieldName} is required and must be at least ${minLength} characters`
+      ),
 
   // Date validation
   date: (fieldName) =>
@@ -74,7 +76,7 @@ const validationRules = {
 // Middleware to handle validation errors
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
-  
+
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => ({
       field: error.param,
@@ -82,7 +84,11 @@ const handleValidationErrors = (req, res, next) => {
       value: error.value,
     }));
 
-    logger.warn(`Validation failed: ${JSON.stringify(errorMessages)} - ${req.method} ${req.originalUrl}`);
+    logger.warn(
+      `Validation failed: ${JSON.stringify(errorMessages)} - ${req.method} ${
+        req.originalUrl
+      }`
+    );
 
     return res.status(400).json({
       success: false,
@@ -92,7 +98,7 @@ const handleValidationErrors = (req, res, next) => {
       },
     });
   }
-  
+
   next();
 };
 
@@ -149,18 +155,40 @@ const gpsTrackingValidation = [
   body("job_id").isMongoId().withMessage("Invalid job ID"),
   validationRules.latitude(),
   validationRules.longitude(),
-  body("accuracy").optional().isFloat({ min: 0 }).withMessage("Accuracy must be positive"),
-  body("speed").optional().isFloat({ min: 0 }).withMessage("Speed must be positive"),
-  body("heading").optional().isFloat({ min: 0, max: 360 }).withMessage("Heading must be 0-360"),
+  body("accuracy")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Accuracy must be positive"),
+  body("speed")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Speed must be positive"),
+  body("heading")
+    .optional()
+    .isFloat({ min: 0, max: 360 })
+    .withMessage("Heading must be 0-360"),
   handleValidationErrors,
 ];
 
 const pricingCalculationValidation = [
-  body("pickup_lat").isFloat({ min: -90, max: 90 }).withMessage("Invalid pickup latitude"),
-  body("pickup_lng").isFloat({ min: -180, max: 180 }).withMessage("Invalid pickup longitude"),
-  body("drop_lat").optional().isFloat({ min: -90, max: 90 }).withMessage("Invalid drop latitude"),
-  body("drop_lng").optional().isFloat({ min: -180, max: 180 }).withMessage("Invalid drop longitude"),
-  body("service_area_id").optional().isMongoId().withMessage("Invalid service area ID"),
+  body("pickup_lat")
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Invalid pickup latitude"),
+  body("pickup_lng")
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Invalid pickup longitude"),
+  body("drop_lat")
+    .optional()
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Invalid drop latitude"),
+  body("drop_lng")
+    .optional()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Invalid drop longitude"),
+  body("service_area_id")
+    .optional()
+    .isMongoId()
+    .withMessage("Invalid service area ID"),
   handleValidationErrors,
 ];
 
@@ -168,14 +196,19 @@ const pricingCalculationValidation = [
 const createBookingValidation = [
   body("vehicle_type").notEmpty().withMessage("Vehicle type is required"),
   body("service_type").notEmpty().withMessage("Service type is required"),
-  body("pickup_location.address").notEmpty().withMessage("Pickup address is required"),
+  body("pickup_location.address")
+    .notEmpty()
+    .withMessage("Pickup address is required"),
   body("pickup_location.lat")
     .isFloat({ min: -90, max: 90 })
     .withMessage("Invalid pickup latitude"),
   body("pickup_location.lng")
     .isFloat({ min: -180, max: 180 })
     .withMessage("Invalid pickup longitude"),
-  body("scheduled_for").isISO8601().toDate().withMessage("Invalid scheduled date"),
+  body("scheduled_for")
+    .isISO8601()
+    .toDate()
+    .withMessage("Invalid scheduled date"),
   handleValidationErrors,
 ];
 
@@ -213,9 +246,17 @@ const autoAssignValidation = [
 // User update validation
 const updateUserValidation = [
   param("id").isMongoId().withMessage("Invalid user ID"),
-  body("name").optional().trim().isLength({ min: 2 }).withMessage("Name must be at least 2 characters"),
+  body("name")
+    .optional()
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("Name must be at least 2 characters"),
   body("phone").optional().isMobilePhone().withMessage("Invalid phone number"),
-  body("email").optional().isEmail().normalizeEmail().withMessage("Invalid email address"),
+  body("email")
+    .optional()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage("Invalid email address"),
   handleValidationErrors,
 ];
 

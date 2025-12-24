@@ -41,7 +41,7 @@ const level = () => {
 const transports = [
   // Console transport
   new winston.transports.Console(),
-  
+
   // Error log file
   new winston.transports.File({
     filename: path.join(__dirname, "../logs/error.log"),
@@ -49,7 +49,7 @@ const transports = [
     maxsize: 5242880, // 5MB
     maxFiles: 5,
   }),
-  
+
   // Combined log file
   new winston.transports.File({
     filename: path.join(__dirname, "../logs/combined.log"),
@@ -88,7 +88,9 @@ logger.logUserAction = (userId, action, details = {}) => {
 };
 
 logger.logApiCall = (endpoint, method, userId, status) => {
-  logger.info(`API: ${method} ${endpoint} - User: ${userId} - Status: ${status}`);
+  logger.info(
+    `API: ${method} ${endpoint} - User: ${userId} - Status: ${status}`
+  );
 };
 
 module.exports = logger;
