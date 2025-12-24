@@ -5,7 +5,13 @@ const {
   calculateDistance,
   calculateETA,
 } = require("../controllers/geoController");
-const { sendNotification } = require("./notificationController");
+
+// Stub notification function until full notification service is implemented
+const sendNotification = async (userId, message, type = "info") => {
+  console.log(`[Notification] ${type.toUpperCase()} to ${userId}: ${message}`);
+  // TODO: Implement actual notification sending (push, SMS, email)
+  return { sent: true, userId, message, type };
+};
 
 // Process geo-alerts based on location updates
 exports.processGeoAlerts = async (

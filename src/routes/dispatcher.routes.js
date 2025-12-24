@@ -16,7 +16,11 @@ router.get("/stats", dispatcherController.getDashboardStats);
 // Bookings management
 router.get("/bookings", dispatcherController.getBookings);
 router.post("/bookings/:id/assign", dispatcherController.assignDriver);
-router.post("/bookings/:id/auto-assign", autoAssignValidation, dispatcherController.autoAssignDriver);
+router.post(
+  "/bookings/:id/auto-assign",
+  autoAssignValidation,
+  dispatcherController.autoAssignDriver
+);
 
 // Driver management
 router.get("/drivers", dispatcherController.getDrivers);

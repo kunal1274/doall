@@ -1,10 +1,5 @@
 const socketIO = require("socket.io");
 const jwt = require("jsonwebtoken");
-const Redis = require("ioredis");
-const redis = new Redis(process.env.REDIS_URL);
-
-// Redis adapter
-const redisAdapter = require("@socket.io/redis-adapter");
 
 // Models (require according to your project's structure)
 const Job = require("../src/models/Job");
@@ -17,15 +12,25 @@ class SocketManager {
   constructor(server) {
     this.io = socketIO(server, {
       cors: {
-        origin: process.env.FRONTEND_URL,
+        origin: process.env.FRONTEND_URL || "*",
         credentials: true,
       },
       transports: ["websocket", "polling"],
     });
 
-    const pubClient = new Redis(process.env.REDIS_URL);
-    const subClient = pubClient.duplicate();
-    this.io.adapter(redisAdapter(pubClient, subClient));
+    // Redis adapter - optional
+    if (process.env.REDIS_URL) {
+      try {
+        const Redis = require("ioredis");
+        const redisAdapter = require("@socket.io/redis-adapter");
+        const pubClient = new Redis(process.env.REDIS_URL);
+        const subClient = pubClient.duplicate();
+        this.io.adapter(redisAdapter(pubClient, subClient));
+        console.log("✓ Socket.IO using Redis adapter");
+      } catch (err) {
+        console.warn("⚠️  Redis adapter not available, using memory adapter");
+      }
+    }
 
     this.initializeMiddleware();
     this.initializeHandlers();
